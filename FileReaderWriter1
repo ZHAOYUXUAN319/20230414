@@ -21,8 +21,7 @@ public class NewClass {
 
     public void conn(String hostName, String port, String dbName, String userName, String password) {
 
-         
-String url = "jdbc:postgresql://123.45.67.89:5434/postgres";
+          String url = "jdbc:postgresql://" + hostName + ":" + port + "/" + dbName + "";
         try {
             Class.forName("org.postgresql.Driver");
 
