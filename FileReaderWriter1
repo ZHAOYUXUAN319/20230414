@@ -1,0 +1,78 @@
+package jdbcsystem;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author hangt
+ */
+public class NewClass {
+
+    //接続文字列
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rset = null;
+
+    public void conn(String hostName, String port, String dbName, String userName, String password) {
+
+         
+String url = "jdbc:postgresql://123.45.67.89:5434/postgres";
+        try {
+            Class.forName("org.postgresql.Driver");
+
+            //PostgreSQLへ接続
+            conn = DriverManager.getConnection(url, userName, password);
+
+            //SELECT文の実行
+            stmt = conn.createStatement();
+            String sql = "SELECT 1";
+            rset = stmt.executeQuery(sql);
+
+            //SELECT結果の受け取り
+            while (rset.next()) {
+                String col = rset.getString(1);
+                System.out.println(col);
+                System.out.println("YYYYYYYYYYYYYYYYYY");
+            }
+
+            //自動コミットOFF
+            conn.setAutoCommit(false);
+            sql = "INSERT INTO meibo VALUES (2, 'AA')";
+            //String sql = "INSERT INTO meibo VALUES (2, 'AA')";
+
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+            conn.commit();
+
+            System.out.println("OOKKKKKKK");
+//            
+            // conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rset != null) {
+                    rset.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+}
